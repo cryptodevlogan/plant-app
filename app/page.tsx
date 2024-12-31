@@ -1,101 +1,92 @@
-import Image from "next/image";
+'use client'
+import { useState, useEffect } from 'react'
+import { Playfair_Display, Lato } from 'next/font/google'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+
+const playfair = Playfair_Display({ subsets: ['latin'] })
+const lato = Lato({ weight: ['300'], subsets: ['latin'] })
 
 export default function Home() {
+  const router = useRouter()
+  const [timeLeft, setTimeLeft] = useState(180)
+  const [isRunning, setIsRunning] = useState(false)
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout
+    if (isRunning && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft(time => time - 1)
+      }, 1000)
+    } else if (timeLeft === 0) {
+      router.push('/walk')
+    }
+    return () => clearInterval(timer)
+  }, [isRunning, timeLeft, router])
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60)
+    const remainingSeconds = seconds % 60
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
+  }
+
+  const startTimer = () => setIsRunning(true)
+  const resetTimer = () => {
+    setIsRunning(false)
+    setTimeLeft(180)
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+    <main className="min-h-screen flex flex-col items-center justify-start gap-4 pt-8 px-6 bg-[#FFCC90]">
+      <div className="w-full max-w-xs flex flex-col items-center text-center mb-4">
+        <h1 className={`${playfair.className} text-[2.5rem] leading-tight tracking-wide text-[#8B4513] mb-2`}>
+          TEA TIME
+        </h1>
+        <p className={`${lato.className} text-[#8B4513] text-sm font-light`}>
+          Take a moment to prepare and enjoy.
+        </p>
+      </div>
+      
+      <div className="relative w-64 h-64">
         <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
+          src="/teacup.png"
+          alt="Cute smiling teacup"
+          width={256}
+          height={256}
+          className="object-contain"
           priority
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+      </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      <div className="w-full max-w-xs text-center -mt-24">
+        <p className={`${playfair.className} text-[3.5rem] leading-none text-[#8B4513] tracking-wide`}>
+          {formatTime(timeLeft)}
+        </p>
+        <div className="mt-4 space-x-4">
+          <button 
+            onClick={isRunning ? resetTimer : startTimer}
+            className={`${lato.className} px-4 py-2 rounded-full bg-[#8B4513] text-white text-sm`}
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            {isRunning ? 'Reset' : 'Start'}
+          </button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </div>
+
+      {/* Navigation buttons */}
+      <div className="fixed bottom-8 left-0 right-0 flex justify-between px-6">
+        <button
+          onClick={() => router.push('/')}
+          className={`${lato.className} px-4 py-2 rounded-full bg-[#8B4513] text-white text-sm opacity-50`}
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          ← Tea
+        </button>
+        <button
+          onClick={() => router.push('/walk')}
+          className={`${lato.className} px-4 py-2 rounded-full bg-[#8B4513] text-white text-sm`}
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+          Walk →
+        </button>
+      </div>
+    </main>
+  )
 }
