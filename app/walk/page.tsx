@@ -9,8 +9,9 @@ const lato = Lato({ weight: ['300'], subsets: ['latin'] })
 export default function WalkPage() {
   const router = useRouter()
   const [thoughts, setThoughts] = useState('')
+  const [timeLeft, setTimeLeft] = useState(300) // 5 minutes in seconds
+  const [isActive, setIsActive] = useState(false)
 
-  // Load existing thoughts when page loads
   useEffect(() => {
     const savedThoughts = localStorage.getItem('walkingThoughts')
     const lastSaveDate = localStorage.getItem('walkingThoughtsDate')
@@ -19,14 +20,37 @@ export default function WalkPage() {
     if (savedThoughts && lastSaveDate === today) {
       setThoughts(savedThoughts)
     } else {
-      // Clear thoughts if it's a new day
       localStorage.removeItem('walkingThoughts')
       localStorage.removeItem('walkingThoughtsDate')
       setThoughts('')
     }
   }, [])
 
-  // Save thoughts to localStorage whenever they change
+  // Timer effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout
+
+    if (isActive && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft(time => time - 1)
+      }, 1000)
+    } else if (timeLeft === 0) {
+      setIsActive(false)
+    }
+
+    return () => clearInterval(interval)
+  }, [isActive, timeLeft])
+
+  const startTimer = () => {
+    setIsActive(true)
+  }
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
   const handleThoughtsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newThoughts = e.target.value
     setThoughts(newThoughts)
@@ -43,9 +67,19 @@ export default function WalkPage() {
             Walk in Silence
           </h1>
         </div>
-        <p className={`${lato.className} text-xl font-bold text-[#2E7D32]`}>
-          5:00
-        </p>
+        <div className="flex items-center justify-center gap-2">
+          <p className={`${lato.className} text-xl font-bold text-[#2E7D32]`}>
+            {formatTime(timeLeft)}
+          </p>
+          {!isActive && timeLeft === 300 && (
+            <button
+              onClick={startTimer}
+              className="text-[#43A047] hover:text-[#2E7D32]"
+            >
+              <span className="material-icons">play_circle</span>
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="w-full max-w-md">

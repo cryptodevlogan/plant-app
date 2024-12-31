@@ -1,8 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Playfair_Display, Lato } from 'next/font/google'
+import { Lato } from 'next/font/google'
 
-const playfair = Playfair_Display({ subsets: ['latin'] })
 const lato = Lato({ weight: ['300'], subsets: ['latin'] })
 
 export const metadata: Metadata = {
