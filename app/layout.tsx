@@ -31,12 +31,14 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/icon?family=Material+Icons" 
           rel="stylesheet"
         />
+        <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/app-icon.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta name="apple-touch-fullscreen" content="yes" />
         <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-title" content="Tea Time" />
       </head>
       <body className={`${playfair.className} ${lato.className} antialiased`}>{children}</body>
     </html>
