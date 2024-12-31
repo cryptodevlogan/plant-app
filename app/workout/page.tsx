@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Playfair_Display, Lato } from 'next/font/google'
 import { useRouter } from 'next/navigation'
 import Head from 'next/head'
@@ -23,9 +23,7 @@ export default function WorkoutPage() {
     if (isPlaying) {
       audio.pause()
     } else {
-      audio.play().catch(error => {
-        console.error('Audio playback failed:', error)
-      })
+      audio.play()
     }
     setIsPlaying(!isPlaying)
   }
