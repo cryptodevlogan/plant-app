@@ -9,7 +9,7 @@ const lato = Lato({ weight: ['300'], subsets: ['latin'] })
 
 export default function Home() {
   const router = useRouter()
-  const [timeLeft, setTimeLeft] = useState(180)
+  const [timeLeft, setTimeLeft] = useState(120)
   const [isRunning, setIsRunning] = useState(false)
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function Home() {
   const startTimer = () => setIsRunning(true)
   const resetTimer = () => {
     setIsRunning(false)
-    setTimeLeft(180)
+    setTimeLeft(120)
   }
 
   return (
@@ -81,10 +81,10 @@ export default function Home() {
           ← Tea
         </button>
         <button
-          onClick={() => router.push('/walk')}
+          onClick={() => router.push('/prayer')}
           className={`${lato.className} px-4 py-2 rounded-full bg-[#8B4513] text-white text-sm`}
         >
-          Walk →
+          Prayer →
         </button>
       </div>
     </main>

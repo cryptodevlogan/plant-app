@@ -188,35 +188,35 @@ export default function TasksPage() {
               Calendar →
             </button>
           </div>
-        </div>
 
-        {/* Modal */}
-        {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[80vh]">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className={`${playfair.className} text-xl text-gray-800`}>Walking Thoughts</h2>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="text-gray-500 hover:text-gray-700"
+          {/* Modal */}
+          {isModalOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+              <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[80vh]">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className={`${playfair.className} text-xl text-gray-800`}>Walking Thoughts</h2>
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <span className="material-icons">close</span>
+                  </button>
+                </div>
+                <div 
+                  className={`${lato.className} text-gray-600 overflow-y-auto pr-4 
+                    shadow-[inset_0_-10px_10px_-10px_rgba(0,0,0,0.1)]`}
+                  style={{ 
+                    maxHeight: 'calc(80vh - 100px)',
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word'
+                  }}
                 >
-                  <span className="material-icons">close</span>
-                </button>
-              </div>
-              <div 
-                className={`${lato.className} text-gray-600 overflow-y-auto pr-4 
-                  shadow-[inset_0_-10px_10px_-10px_rgba(0,0,0,0.1)]`}
-                style={{ 
-                  maxHeight: 'calc(80vh - 100px)',
-                  whiteSpace: 'pre-wrap',
-                  wordBreak: 'break-word'
-                }}
-              >
-                {walkingThoughts}
+                  {walkingThoughts}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </main>
     </>
   )

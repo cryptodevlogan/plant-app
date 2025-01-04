@@ -33,10 +33,16 @@ export default function WalkPage() {
 
     if (isActive && timeLeft > 0) {
       interval = setInterval(() => {
-        setTimeLeft(time => time - 1)
+        setTimeLeft(time => {
+          if (time <= 1) {
+            // Play alarm sound when timer reaches 0
+            const alarm = new Audio('/gentle-alarm.mp3')
+            alarm.play()
+            setIsActive(false)
+          }
+          return time - 1
+        })
       }, 1000)
-    } else if (timeLeft === 0) {
-      setIsActive(false)
     }
 
     return () => clearInterval(interval)
