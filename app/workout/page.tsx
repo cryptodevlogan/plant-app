@@ -20,7 +20,7 @@ export default function WorkoutPage() {
     };
   }, [isPlaying]);
 
-  const formatTime = (totalSeconds) => {
+  const formatTime = (totalSeconds: number): string => {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
@@ -81,13 +81,15 @@ export default function WorkoutPage() {
   ];
 
   const toggleAudio = () => {
-    const audio = document.getElementById('backgroundAudio');
-    if (isPlaying) {
-      audio.pause();
-    } else {
-      audio.play();
+    const audio = document.getElementById('backgroundAudio') as HTMLAudioElement;
+    if (audio) {
+      if (isPlaying) {
+        audio.pause();
+      } else {
+        audio.play();
+      }
+      setIsPlaying(!isPlaying);
     }
-    setIsPlaying(!isPlaying);
   };
 
   return (
@@ -134,8 +136,10 @@ export default function WorkoutPage() {
                   <div className="flex items-center gap-6">
                     <button
                       onClick={() => {
-                        const audio = document.getElementById('backgroundAudio');
-                        audio.currentTime = Math.max(0, audio.currentTime - 10);
+                        const audio = document.getElementById('backgroundAudio') as HTMLAudioElement;
+                        if (audio) {
+                          audio.currentTime = Math.max(0, audio.currentTime - 10);
+                        }
                       }}
                       className="p-2 hover:bg-orange-50 rounded-full transition-colors"
                     >
@@ -154,8 +158,10 @@ export default function WorkoutPage() {
                     
                     <button
                       onClick={() => {
-                        const audio = document.getElementById('backgroundAudio');
-                        audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+                        const audio = document.getElementById('backgroundAudio') as HTMLAudioElement;
+                        if (audio) {
+                          audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+                        }
                       }}
                       className="p-2 hover:bg-orange-50 rounded-full transition-colors"
                     >
@@ -191,20 +197,23 @@ export default function WorkoutPage() {
                           <div>
                             <div className="flex items-baseline gap-2">
                               <h4 className="text-lg font-medium text-orange-950">{item.name}</h4>
-                              {(item.time || item.goal) && (
+                              {'time' in item ? (
                                 <span className="text-sm text-orange-600">
-                                  ({item.time || item.goal})
+                                  ({item.time})
                                 </span>
-                              )}
+                              ) : 'goal' in item ? (
+                                <span className="text-sm text-orange-600">
+                                  ({item.goal})
+                                </span>
+                              ) : null}
                             </div>
-                            
                             {item.description && (
                               <p className="text-sm text-orange-600 mt-1">{item.description}</p>
                             )}
                             
-                            {item.notes && (
+                            {'notes' in item && item.notes && (
                               <ul className="mt-3 space-y-2">
-                                {item.notes.map((note, noteIdx) => (
+                                {item.notes.map((note: string, noteIdx: number) => (
                                   <li key={noteIdx} className="flex items-start gap-2 text-sm text-orange-600">
                                     <span className="text-amber-400 mt-1">•</span>
                                     <span>{note}</span>
