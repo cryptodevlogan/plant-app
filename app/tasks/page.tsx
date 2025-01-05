@@ -214,15 +214,3 @@ export default function TasksPage() {
     </>
   )
 }
-
-// Add this to your globals.css or as a style tag
-const styles = `
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  .animate-fade-in {
-    animation: fadeIn 0.2s ease-in-out;
-  }
-`
