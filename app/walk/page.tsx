@@ -39,9 +39,6 @@ export default function WalkPage() {
     trackMouse: true
   })
 
-  const leftOpacity = Math.max(0, Math.min(1, swipeAmount / 100))
-  const rightOpacity = Math.max(0, Math.min(1, -swipeAmount / 100))
-
   useEffect(() => {
     const savedThoughts = localStorage.getItem('walkingThoughts')
     const lastSaveDate = localStorage.getItem('walkingThoughtsDate')
