@@ -4,7 +4,7 @@ import MenuButton from '../components/MenuButton'
 import { useState, useEffect } from 'react'
 import { Playfair_Display, DM_Serif_Display } from 'next/font/google'
 import { useRouter } from 'next/navigation'
-import { Sun, Cloud, Bird, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Sun, Cloud, Bird } from 'lucide-react'
 import Head from 'next/head'
 import { useSwipeable } from 'react-swipeable'
 
@@ -19,12 +19,10 @@ export default function WalkPage() {
   const [isExpanded, setIsExpanded] = useState(false)
   const [swipeAmount, setSwipeAmount] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
-  const [isSwiping, setIsSwiping] = useState(false)
 
-  const handlers = useSwipeable({
+  useSwipeable({
     onSwiping: (e) => {
       setSwipeAmount(e.deltaX)
-      setIsSwiping(true)
     },
     onSwipedLeft: () => {
       setIsTransitioning(true)
@@ -36,7 +34,6 @@ export default function WalkPage() {
     },
     onTouchEndOrOnMouseUp: () => {
       setSwipeAmount(0)
-      setIsSwiping(false)
     },
     preventScrollOnSwipe: true,
     trackMouse: true
