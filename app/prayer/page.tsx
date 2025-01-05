@@ -73,19 +73,19 @@ export default function PrayerPage() {
           </div>
         </div>
 
-        <div className="relative w-64 h-64 mb-4">
+        <div className="relative w-64 h-64 mb-4" onClick={startTimer}>
           <Image
             src="/cross.png"
             alt="Cross"
             width={256}
             height={256}
-            className="object-contain"
+            className="object-contain cursor-pointer"
             priority
           />
         </div>
 
         <div className="text-center mb-8">
-          <p className={`${playfair.className} text-lg text-[#8B4513] mb-2`}>
+          <p className={`${playfair.className} text-lg text-[#8B4513]`}>
             Start your day in His presence.
           </p>
           <p className={`${playfair.className} text-lg text-[#8B4513]`}>

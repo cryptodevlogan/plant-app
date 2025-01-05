@@ -1,32 +1,58 @@
 'use client'
-import React, { useState, useEffect } from 'react';
-import { Timer, Play, Pause, SkipForward, SkipBack, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+
+import { useState, useEffect } from 'react'
+import { Montserrat, Inter } from 'next/font/google'
+import { useRouter } from 'next/navigation'
+import { Play, Pause, SkipForward, SkipBack } from 'lucide-react'
+
+// Font configuration
+const montserrat = Montserrat({ 
+  subsets: ['latin'],
+  weight: ['600', '700'],  // Semi-bold and bold for headings
+})
+
+const inter = Inter({ 
+  subsets: ['latin'],
+  weight: ['400', '500'],  // Regular and medium for body text
+})
+
+interface ExerciseItem {
+  name: string
+  time?: string
+  duration?: string
+  goal?: string
+  description?: string
+  notes?: string[]
+}
+
+interface ExerciseSection {
+  section: string
+  description?: string
+  items: ExerciseItem[]
+}
 
 export default function WorkoutPage() {
-  const router = useRouter();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [seconds, setSeconds] = useState(0);
+  const router = useRouter()
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [seconds, setSeconds] = useState(0)
 
   useEffect(() => {
-    let interval: NodeJS.Timeout | undefined;
+    let interval: NodeJS.Timeout
     if (isPlaying) {
       interval = setInterval(() => {
-        setSeconds(prevSeconds => prevSeconds + 1);
-      }, 1000);
+        setSeconds(prevSeconds => prevSeconds + 1)
+      }, 1000)
     }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [isPlaying]);
+    return () => clearInterval(interval)
+  }, [isPlaying])
 
   const formatTime = (totalSeconds: number): string => {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  };
+    const minutes = Math.floor(totalSeconds / 60)
+    const seconds = totalSeconds % 60
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`
+  }
 
-  const exercises = [
+  const exercises: ExerciseSection[] = [
     {
       section: "Warm-Up (2 Minutes)",
       items: [
@@ -74,185 +100,151 @@ export default function WorkoutPage() {
     {
       section: "Cool Down (1 Minute)",
       items: [
-        { name: "Child's Pose", time: "30 seconds", description: "Stretch your lower back and hips" },
-        { name: "Standing Forward Fold", time: "30 seconds", description: "Stretch your hamstrings and lower back" }
+        { name: "Child's Pose", duration: "30 seconds", description: "Stretch your lower back and hips" },
+        { name: "Standing Forward Fold", duration: "30 seconds", description: "Stretch your hamstrings and lower back" }
       ]
     }
-  ];
+  ]
 
   const toggleAudio = () => {
-    const audio = document.getElementById('backgroundAudio') as HTMLAudioElement;
-    if (audio) {
-      if (isPlaying) {
-        audio.pause();
-      } else {
-        audio.play();
-      }
-      setIsPlaying(!isPlaying);
+    const audio = document.getElementById('backgroundAudio') as HTMLAudioElement
+    if (isPlaying) {
+      audio.pause()
+    } else {
+      audio.play()
     }
-  };
+    setIsPlaying(!isPlaying)
+  }
 
   return (
-    <main className="min-h-screen flex flex-col bg-gradient-to-b from-orange-50 via-amber-50 to-white font-sans">
-      {/* Header Section */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-6xl mx-auto p-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="font-serif text-3xl text-orange-950 mb-1">
-                Morning Workout
-              </h1>
-              <p className="text-sm text-orange-600">
-                Healthy body, Healthy mind, Healthy life
-              </p>
+    <main className="min-h-screen p-6 bg-gradient-to-b from-orange-50 via-amber-50 to-white">
+      <div className="w-full text-center mb-8">
+        <h1 className={`${montserrat.className} text-xl sm:text-2xl mb-2 text-orange-950 font-bold tracking-wide uppercase`}>
+          Morning Workout
+        </h1>
+        <p className={`${inter.className} text-xs sm:text-sm text-orange-600 tracking-wide`}>
+          Healthy body, Healthy mind, Healthy life
+        </p>
+      </div>
+
+      <div className="flex gap-4 sm:gap-6">
+        <div className="w-1/3">
+          <div className="flex justify-center items-center gap-2 mb-6">
+            <p className={`${montserrat.className} text-lg sm:text-xl text-orange-950 font-semibold`}>
+            {formatTime(seconds)}
+          </p>
+          <button
+            onClick={() => setIsPlaying(!isPlaying)}
+              className={`${inter.className} px-2 sm:px-3 py-1 text-xs sm:text-sm rounded-full bg-amber-500 text-white hover:bg-amber-600 transition-colors font-medium`}
+          >
+            {isPlaying ? 'Stop' : 'Start'}
+          </button>
+        </div>
+
+          <div className="mt-8">
+            <div className="flex justify-center items-center gap-1 sm:gap-2 mb-8">
+            <audio id="backgroundAudio" src="/meditation.mp3" loop />
+            <button
+              onClick={() => {
+                const audio = document.getElementById('backgroundAudio') as HTMLAudioElement
+                audio.currentTime = Math.max(0, audio.currentTime - 10)
+              }}
+                className={`${inter.className} p-1.5 hover:bg-amber-50 rounded-full transition-colors`}
+              aria-label="Rewind 10 seconds"
+            >
+              <SkipBack className="w-4 h-4 text-amber-600" />
+            </button>
+            <button
+              onClick={toggleAudio}
+                className={`${inter.className} p-2 bg-amber-100 hover:bg-amber-200 rounded-full transition-colors`}
+              aria-label={isPlaying ? 'Pause' : 'Play'}
+            >
+              {isPlaying ? 
+                <Pause className="w-5 h-5 text-amber-600" /> :
+                <Play className="w-5 h-5 text-amber-600" />
+              }
+            </button>
+            <button
+              onClick={() => {
+                const audio = document.getElementById('backgroundAudio') as HTMLAudioElement
+                audio.currentTime = Math.min(audio.duration, audio.currentTime + 10)
+              }}
+                className={`${inter.className} p-1.5 hover:bg-amber-50 rounded-full transition-colors`}
+              aria-label="Forward 10 seconds"
+            >
+              <SkipForward className="w-4 h-4 text-amber-600" />
+            </button>
+          </div>
+
+            <h2 className={`${montserrat.className} text-lg sm:text-xl mb-8 text-orange-950 text-center font-bold tracking-wide uppercase`}>
+            No Excuses
+          </h2>
+
+            <div className="relative w-32 sm:w-64 mx-auto mt-8 -ml-4">
+              <img
+                src="/body.png"
+                alt="Motivational bodybuilder"
+                className="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
+              />
             </div>
-            
-            <div className="flex items-center gap-4 bg-amber-50 px-6 py-3 rounded-lg">
-              <Timer className="text-amber-600 w-5 h-5" />
-              <p className="font-serif text-2xl text-orange-950">
-                {formatTime(seconds)}
-              </p>
-              <button
-                onClick={() => setIsPlaying(!isPlaying)}
-                className="px-4 py-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition-colors"
-              >
-                {isPlaying ? 'Pause' : 'Start'}
-              </button>
-            </div>
+          </div>
+        </div>
+
+        <div className="w-2/3 overflow-y-auto mb-20" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+          <div className="space-y-6 sm:space-y-8">
+            {exercises.map((section, idx) => (
+              <div key={idx} className="space-y-3 sm:space-y-4">
+                <h3 className={`${montserrat.className} text-base sm:text-lg font-semibold text-orange-900 tracking-wide`}>
+                  {section.section}
+                </h3>
+                {section.description && (
+                  <p className={`${inter.className} text-xs sm:text-sm text-orange-600 italic mb-2`}>
+                    {section.description}
+                  </p>
+                )}
+                <ul className="space-y-3 sm:space-y-4">
+                  {section.items.map((item, itemIdx) => (
+                    <li key={itemIdx} className={`${inter.className} pl-3 sm:pl-4 border-l-2 border-amber-200 hover:border-amber-400 transition-colors`}>
+                      <div className="flex flex-wrap items-baseline gap-x-2 font-medium text-orange-950 text-sm sm:text-base">
+                        <span>{item.name}</span>
+                        {item.time && <span className="text-xs sm:text-sm text-orange-600">({item.time})</span>}
+                        {item.goal && <span className="text-xs sm:text-sm text-orange-600">({item.goal})</span>}
+                      </div>
+                      {item.description && (
+                        <p className="text-xs sm:text-sm text-orange-600 italic mt-1">{item.description}</p>
+                      )}
+                      {item.notes && (
+                        <ul className="mt-1 space-y-1">
+                          {item.notes.map((note, noteIdx) => (
+                            <li key={noteIdx} className="text-xs sm:text-sm text-orange-600 pl-3 sm:pl-4 relative before:content-['•'] before:absolute before:left-0 before:text-amber-400">
+                              {note}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex-grow bg-gradient-to-b from-orange-50/50 to-transparent">
-        <div className="max-w-6xl mx-auto p-6">
-          <div className="flex gap-8 h-full">
-            {/* Left Sidebar */}
-            <div className="w-1/3">
-              <div className="sticky top-6 bg-white rounded-xl shadow-sm p-6">
-                <div className="flex flex-col items-center gap-6">
-                  <audio id="backgroundAudio" src="/meditation.mp3" loop />
-                  
-                  <div className="flex items-center gap-6">
-                    <button
-                      onClick={() => {
-                        const audio = document.getElementById('backgroundAudio') as HTMLAudioElement;
-                        if (audio) {
-                          audio.currentTime = Math.max(0, audio.currentTime - 10);
-                        }
-                      }}
-                      className="p-2 hover:bg-orange-50 rounded-full transition-colors"
-                    >
-                      <SkipBack className="w-6 h-6 text-amber-600" />
-                    </button>
-                    
-                    <button
-                      onClick={toggleAudio}
-                      className="p-4 bg-amber-100 hover:bg-amber-200 rounded-full transition-colors"
-                    >
-                      {isPlaying ? 
-                        <Pause className="w-8 h-8 text-amber-600" /> :
-                        <Play className="w-8 h-8 text-amber-600" />
-                      }
-                    </button>
-                    
-                    <button
-                      onClick={() => {
-                        const audio = document.getElementById('backgroundAudio') as HTMLAudioElement;
-                        if (audio) {
-                          audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
-                        }
-                      }}
-                      className="p-2 hover:bg-orange-50 rounded-full transition-colors"
-                    >
-                      <SkipForward className="w-6 h-6 text-amber-600" />
-                    </button>
-                  </div>
-
-                  <h2 className="font-serif text-2xl text-orange-950">
-                    No Excuses
-                  </h2>
-                </div>
-              </div>
-            </div>
-
-            {/* Main Content */}
-            <div className="w-2/3 pb-24">
-              <div className="space-y-8">
-                {exercises.map((section, idx) => (
-                  <div key={idx} className="bg-white rounded-xl shadow-sm p-6">
-                    <h3 className="font-serif text-xl text-orange-950 mb-4">
-                      {section.section}
-                    </h3>
-                    
-                    {section.description && (
-                      <p className="text-sm text-orange-600 mb-6">
-                        {section.description}
-                      </p>
-                    )}
-                    
-                    <div className="space-y-6">
-                      {section.items.map((item, itemIdx) => (
-                        <div key={itemIdx} className="pl-4 border-l-2 border-amber-200 hover:border-amber-400 transition-colors">
-                          <div>
-                            <div className="flex items-baseline gap-2">
-                              <h4 className="text-lg font-medium text-orange-950">{item.name}</h4>
-                              {'time' in item ? (
-                                <span className="text-sm text-orange-600">
-                                  ({item.time})
-                                </span>
-                              ) : 'goal' in item ? (
-                                <span className="text-sm text-orange-600">
-                                  ({item.goal})
-                                </span>
-                              ) : null}
-                            </div>
-                            {item.description && (
-                              <p className="text-sm text-orange-600 mt-1">{item.description}</p>
-                            )}
-                            
-                            {'notes' in item && item.notes && (
-                              <ul className="mt-3 space-y-2">
-                                {item.notes.map((note: string, noteIdx: number) => (
-                                  <li key={noteIdx} className="flex items-start gap-2 text-sm text-orange-600">
-                                    <span className="text-amber-400 mt-1">•</span>
-                                    <span>{note}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Navigation Footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between">
-          <button
-            onClick={() => router.push('/walk')}
-            className="flex items-center gap-2 px-6 py-3 rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition-colors"
-          >
-            <ChevronLeft className="w-5 h-5" />
-            Walk
-          </button>
-          
-          <button
-            onClick={() => router.push('/tasks')}
-            className="flex items-center gap-2 px-6 py-3 rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition-colors"
-          >
-            Tasks
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
+      <div className="fixed bottom-8 left-0 right-0 flex justify-between px-6">
+        <button
+          onClick={() => router.push('/walk')}
+          className={`${inter.className} px-4 py-2 rounded-full bg-amber-500 text-white hover:bg-amber-600 transition-colors font-medium`}
+        >
+          ← Walk
+        </button>
+        <button
+          onClick={() => router.push('/tasks')}
+          className={`${inter.className} px-4 py-2 rounded-full bg-amber-500 text-white hover:bg-amber-600 transition-colors font-medium`}
+        >
+          Tasks →
+        </button>
       </div>
     </main>
-  );
+  )
 }
