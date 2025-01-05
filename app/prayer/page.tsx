@@ -62,14 +62,6 @@ export default function PrayerPage() {
             <p className={`${playfair.className} text-[3.5rem] leading-none text-[#8B4513] tracking-wide`}>
               {formatTime(timeLeft)}
             </p>
-            {!isActive && timeLeft === 120 && (
-              <button
-                onClick={startTimer}
-                className="text-[#8B4513] hover:text-[#6A4423]"
-              >
-                <span className="material-icons">play_circle</span>
-              </button>
-            )}
           </div>
         </div>
 
