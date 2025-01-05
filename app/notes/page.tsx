@@ -55,7 +55,7 @@ export default function NotesPage() {
           <div className="flex items-center gap-2 text-gray-500">
             <Calendar size={16} />
             <p className={`${inter.className} font-light`}>
-              Today's Reflections
+              Today&apos;s Reflections
             </p>
           </div>
         </div>
