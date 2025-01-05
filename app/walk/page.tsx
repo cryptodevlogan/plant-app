@@ -48,10 +48,6 @@ export default function WalkPage() {
     return () => clearInterval(interval)
   }, [isActive, timeLeft])
 
-  const startTimer = () => {
-    setIsActive(true)
-  }
-
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
