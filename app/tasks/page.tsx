@@ -8,18 +8,32 @@ import { Plus, Calendar, CheckCircle2, Edit3, Trash2, ArrowLeft, ArrowRight } fr
 const playfair = Playfair_Display({ subsets: ['latin'] })
 const inter = Inter({ subsets: ['latin'] })
 
+// Add interface for Task
+interface Task {
+  text: string
+  completed: boolean
+  isActive?: boolean  // Add this to track active state
+}
+
 export default function TasksPage() {
   const router = useRouter()
-  const [tasks, setTasks] = useState<string[]>([])
+  // Update state to use Task interface
+  const [tasks, setTasks] = useState<Task[]>([])
   const [newTask, setNewTask] = useState('')
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
   const [editingText, setEditingText] = useState('')
 
   const addTask = () => {
     if (newTask.trim()) {
-      setTasks([...tasks, newTask.trim()])
+      setTasks([...tasks, { text: newTask.trim(), completed: false }])
       setNewTask('')
     }
+  }
+
+  const toggleTask = (index: number) => {
+    const newTasks = [...tasks]
+    newTasks[index].completed = !newTasks[index].completed
+    setTasks(newTasks)
   }
 
   const deleteTask = (index: number) => {
@@ -29,13 +43,13 @@ export default function TasksPage() {
 
   const startEditing = (index: number) => {
     setEditingIndex(index)
-    setEditingText(tasks[index])
+    setEditingText(tasks[index].text)
   }
 
   const saveEdit = () => {
     if (editingIndex !== null && editingText.trim()) {
       const newTasks = [...tasks]
-      newTasks[editingIndex] = editingText.trim()
+      newTasks[editingIndex] = { ...newTasks[editingIndex], text: editingText.trim() }
       setTasks(newTasks)
       setEditingIndex(null)
       setEditingText('')
@@ -50,6 +64,15 @@ export default function TasksPage() {
         addTask()
       }
     }
+  }
+
+  const toggleTaskActive = (index: number) => {
+    const newTasks = tasks.map((task, i) => ({
+      ...task,
+      isActive: i === index ? !task.isActive : false
+    }))
+    setTasks(newTasks)
+    setEditingIndex(null)  // Reset editing state when toggling active state
   }
 
   return (
@@ -90,52 +113,72 @@ export default function TasksPage() {
           </div>
         </div>
 
-        {/* Task List */}
+        {/* Updated Task List */}
         <div className="px-6 mt-6">
           <div className="space-y-3">
             {tasks.map((task, index) => (
               <div
                 key={index}
-                className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center gap-3"
+                onClick={() => toggleTaskActive(index)}
+                className={`rounded-2xl p-4 shadow-sm border border-gray-100 
+                           flex items-center gap-3 cursor-pointer
+                           hover:bg-gray-50 transition-colors
+                           ${task.completed ? 'bg-green-50' : 'bg-white'}
+                           ${task.isActive ? 'ring-2 ring-blue-200' : ''}`}
               >
-                <button className="text-gray-300 hover:text-blue-500 transition-colors">
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    toggleTask(index)
+                  }}
+                  className={`${task.completed ? 'text-green-500' : 'text-gray-300'} 
+                             hover:text-green-500 transition-colors`}
+                >
                   <CheckCircle2 size={22} />
                 </button>
+                
                 {editingIndex === index ? (
                   <input
                     type="text"
                     value={editingText}
                     onChange={(e) => setEditingText(e.target.value)}
                     onKeyPress={handleKeyPress}
+                    onClick={(e) => e.stopPropagation()}
                     className={`${inter.className} flex-1 focus:outline-none`}
                     autoFocus
                   />
                 ) : (
-                  <span className={`${inter.className} flex-1 text-gray-700`}>{task}</span>
+                  <span className={`${inter.className} flex-1 text-gray-700 
+                                  ${task.completed ? 'line-through text-gray-400' : ''}`}>
+                    {task.text}
+                  </span>
                 )}
-                <div className="flex gap-2">
-                  {editingIndex === index ? (
+
+                {task.isActive && (
+                  <div className="flex gap-2 animate-fade-in" onClick={e => e.stopPropagation()}>
+                    {editingIndex === index ? (
+                      <button
+                        onClick={saveEdit}
+                        className="text-blue-500 hover:text-blue-600 transition-colors"
+                      >
+                        <CheckCircle2 size={20} />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => startEditing(index)}
+                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                      >
+                        <Edit3 size={18} />
+                      </button>
+                    )}
                     <button
-                      onClick={saveEdit}
-                      className="text-blue-500 hover:text-blue-600 transition-colors"
+                      onClick={() => deleteTask(index)}
+                      className="text-gray-400 hover:text-red-500 transition-colors"
                     >
-                      <CheckCircle2 size={20} />
+                      <Trash2 size={18} />
                     </button>
-                  ) : (
-                    <button
-                      onClick={() => startEditing(index)}
-                      className="text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                      <Edit3 size={18} />
-                    </button>
-                  )}
-                  <button
-                    onClick={() => deleteTask(index)}
-                    className="text-gray-400 hover:text-red-500 transition-colors"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -171,3 +214,15 @@ export default function TasksPage() {
     </>
   )
 }
+
+// Add this to your globals.css or as a style tag
+const styles = `
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-in-out;
+  }
+`

@@ -74,12 +74,7 @@ export default function Home() {
 
       {/* Navigation buttons */}
       <div className="fixed bottom-8 left-0 right-0 flex justify-between px-6">
-        <button
-          onClick={() => router.push('/')}
-          className={`${lato.className} px-4 py-2 rounded-full bg-[#8B4513] text-white text-sm opacity-50`}
-        >
-          ← Tea
-        </button>
+        <div></div>
         <button
           onClick={() => router.push('/prayer')}
           className={`${lato.className} px-4 py-2 rounded-full bg-[#8B4513] text-white text-sm`}
