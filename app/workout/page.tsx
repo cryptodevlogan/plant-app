@@ -237,15 +237,21 @@ export default function WorkoutPage() {
       <div className="fixed bottom-8 left-0 right-0 flex justify-between px-6">
         <button
           onClick={() => router.push('/walk')}
-          className={`${inter.className} px-4 py-2 rounded-full bg-amber-500 text-white hover:bg-amber-600 transition-colors font-medium`}
+          className="p-2 rounded-full bg-[#8B4513]/20 hover:bg-[#8B4513]/30 transition-colors"
+          aria-label="Go to Walk page"
         >
-          ← Walk
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-[#8B4513]/50">
+            <path d="M15 18l-6-6 6-6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </button>
         <button
           onClick={() => router.push('/tasks')}
-          className={`${inter.className} px-4 py-2 rounded-full bg-amber-500 text-white hover:bg-amber-600 transition-colors font-medium`}
+          className="p-2 rounded-full bg-[#8B4513]/20 hover:bg-[#8B4513]/30 transition-colors"
+          aria-label="Go to Tasks page"
         >
-          Tasks →
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-[#8B4513]/50">
+            <path d="M9 18l6-6-6-6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </button>
       </div>
     </main>

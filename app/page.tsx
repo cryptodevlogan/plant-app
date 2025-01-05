@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import { Playfair_Display, Lato } from 'next/font/google'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import MenuButton from './components/MenuButton'
+import SwipeNavigation from './components/SwipeNavigation'
 
 const playfair = Playfair_Display({ subsets: ['latin'] })
 const lato = Lato({ weight: ['300'], subsets: ['latin'] })
@@ -37,51 +39,50 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-start gap-4 pt-8 px-6 bg-[#FFCC90]">
-      <div className="w-full max-w-xs flex flex-col items-center text-center mb-4">
-        <h1 className={`${playfair.className} text-[2.5rem] leading-tight tracking-wide text-[#8B4513] mb-2`}>
-          TEA TIME
-        </h1>
-        <p className={`${lato.className} text-[#8B4513] text-sm font-light`}>
-          Take a moment to prepare and enjoy.
-        </p>
-      </div>
-      
-      <div className="relative w-64 h-64">
-        <Image
-          src="/teacup.png"
-          alt="Cute smiling teacup"
-          width={256}
-          height={256}
-          className="object-contain"
-          priority
-        />
-      </div>
+    <SwipeNavigation
+      leftPath="/notes"
+      rightPath="/prayer"
+      currentPage="Tea"
+    >
+      <main className="min-h-screen bg-[#FBF0DE]">
+        <MenuButton className="text-[#8B4513]/20 hover:text-[#8B4513]/70 transition-colors duration-300" />
+        
+        <div className="min-h-[calc(100vh-48px)] flex flex-col items-center justify-start gap-4 pt-4 px-6 bg-[#FFCC90] relative">
+          <div className="w-full max-w-xs flex flex-col items-center text-center mb-4">
+            <h1 className={`${playfair.className} text-[2.5rem] leading-tight tracking-wide text-[#8B4513] mb-2`}>
+              TEA TIME
+            </h1>
+            <p className={`${lato.className} text-[#8B4513] text-sm font-light`}>
+              Take a moment to prepare and enjoy.
+            </p>
+          </div>
+          
+          <div className="relative w-64 h-64">
+            <Image
+              src="/teacup.png"
+              alt="Cute smiling teacup"
+              width={256}
+              height={256}
+              className="object-contain"
+              priority
+            />
+          </div>
 
-      <div className="w-full max-w-xs text-center -mt-24">
-        <p className={`${playfair.className} text-[3.5rem] leading-none text-[#8B4513] tracking-wide`}>
-          {formatTime(timeLeft)}
-        </p>
-        <div className="mt-4 space-x-4">
-          <button 
-            onClick={isRunning ? resetTimer : startTimer}
-            className={`${lato.className} px-4 py-2 rounded-full bg-[#8B4513] text-white text-sm`}
-          >
-            {isRunning ? 'Reset' : 'Start'}
-          </button>
+          <div className="w-full max-w-xs text-center -mt-24">
+            <p className={`${playfair.className} text-[3.5rem] leading-none text-[#8B4513] tracking-wide`}>
+              {formatTime(timeLeft)}
+            </p>
+            <div className="mt-4 space-x-4">
+              <button 
+                onClick={isRunning ? resetTimer : startTimer}
+                className={`${lato.className} px-4 py-2 rounded-full bg-[#8B4513] text-white text-sm`}
+              >
+                {isRunning ? 'Reset' : 'Start'}
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* Navigation buttons */}
-      <div className="fixed bottom-8 left-0 right-0 flex justify-between px-6">
-        <div></div>
-        <button
-          onClick={() => router.push('/prayer')}
-          className={`${lato.className} px-4 py-2 rounded-full bg-[#8B4513] text-white text-sm`}
-        >
-          Prayer →
-        </button>
-      </div>
-    </main>
+      </main>
+    </SwipeNavigation>
   )
 }
