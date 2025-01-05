@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { useRouter } from 'next/navigation'
 import Head from 'next/head'
@@ -22,6 +22,19 @@ export default function TasksPage() {
   const [newTask, setNewTask] = useState('')
   const [editingIndex, setEditingIndex] = useState<number | null>(null)
   const [editingText, setEditingText] = useState('')
+
+  // Load tasks from localStorage when component mounts
+  useEffect(() => {
+    const savedTasks = localStorage.getItem('tasks')
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks))
+    }
+  }, [])
+
+  // Save tasks to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+  }, [tasks])
 
   const addTask = () => {
     if (newTask.trim()) {
