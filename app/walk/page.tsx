@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { Playfair_Display, DM_Serif_Display } from 'next/font/google'
 import { useRouter } from 'next/navigation'
-import { Sun, Cloud, Bird, Church, Dumbbell } from 'lucide-react'
+import { Sun, Cloud, Bird } from 'lucide-react'
 import Head from 'next/head'
 
 const playfair = Playfair_Display({ subsets: ['latin'] })

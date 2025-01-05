@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Montserrat, Inter } from 'next/font/google'
 import { useRouter } from 'next/navigation'
 import { Play, Pause, SkipForward, SkipBack } from 'lucide-react'
+import Image from 'next/image'
 
 // Font configuration
 const montserrat = Montserrat({ 
@@ -181,9 +182,11 @@ export default function WorkoutPage() {
           </h2>
 
             <div className="relative w-32 sm:w-64 mx-auto mt-8 -ml-4">
-              <img
-                src="/body.png"
+              <Image 
+                src="/body.png" 
                 alt="Motivational bodybuilder"
+                width={256}
+                height={256}
                 className="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
               />
             </div>
