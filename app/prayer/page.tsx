@@ -2,16 +2,19 @@
 import { useState, useEffect } from 'react'
 import { Playfair_Display, Lato } from 'next/font/google'
 import { useRouter } from 'next/navigation'
-import Head from 'next/head'
 import Image from 'next/image'
+import SwipeNavigation from '../components/SwipeNavigation'
+import { Home } from 'lucide-react'
 
 const playfair = Playfair_Display({ subsets: ['latin'] })
 const lato = Lato({ weight: ['300'], subsets: ['latin'] })
 
 export default function PrayerPage() {
   const router = useRouter()
-  const [timeLeft, setTimeLeft] = useState(120) // Changed from 60 to 120 seconds (2 minutes)
+  const [timeLeft, setTimeLeft] = useState(120)
   const [isActive, setIsActive] = useState(false)
+  const [swipeAmount, setSwipeAmount] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
 
   useEffect(() => {
     let interval: NodeJS.Timeout
@@ -20,7 +23,6 @@ export default function PrayerPage() {
       interval = setInterval(() => {
         setTimeLeft(time => {
           if (time <= 1) {
-            // Play alarm sound when timer reaches 0
             const alarm = new Audio('/gentle-alarm.mp3')
             alarm.play()
             setIsActive(false)
@@ -44,14 +46,23 @@ export default function PrayerPage() {
   }
 
   return (
-    <>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-      </Head>
-      <main className="min-h-screen flex flex-col items-center p-6 bg-[#FBF0DE]">
-        <div className="w-full text-center mb-8">
+    <SwipeNavigation
+      leftPath="/tea"
+      rightPath="/walk"
+      currentPage="Prayer"
+    >
+      <main className={`min-h-screen relative overflow-hidden
+        ${isTransitioning ? 'transition-transform duration-300' : ''}
+        transform translate-x-[${swipeAmount}px] bg-[#FBF0DE]`}
+      >
+        <button
+          onClick={() => router.push('/')}
+          className="fixed top-4 left-4 p-2 text-[#8B4513]/50 hover:text-[#8B4513] transition-colors z-50"
+        >
+          <Home className="w-5 h-5" />
+        </button>
+
+        <div className="w-full text-center mb-8 pt-6">
           <div className="flex items-center justify-center gap-2 mb-2">
             <span className="material-icons text-[#8B4513]">church</span>
             <h1 className={`${playfair.className} text-2xl text-[#8B4513]`}>
@@ -65,7 +76,7 @@ export default function PrayerPage() {
           </div>
         </div>
 
-        <div className="relative w-64 h-64 mb-4" onClick={startTimer}>
+        <div className="relative w-64 h-64 mb-4 mx-auto" onClick={startTimer}>
           <Image
             src="/cross.png"
             alt="Cross"
@@ -84,22 +95,7 @@ export default function PrayerPage() {
             Pause, reflect, and trust in His plan.
           </p>
         </div>
-
-        <div className="fixed bottom-8 left-0 right-0 flex justify-between px-6">
-          <button
-            onClick={() => router.push('/')}
-            className={`${lato.className} px-4 py-2 rounded-full bg-[#8B4513] text-white text-sm hover:bg-[#6A4423]`}
-          >
-            ← Tea
-          </button>
-          <button
-            onClick={() => router.push('/walk')}
-            className={`${lato.className} px-4 py-2 rounded-full bg-[#8B4513] text-white text-sm hover:bg-[#6A4423]`}
-          >
-            Walk →
-          </button>
-        </div>
       </main>
-    </>
+    </SwipeNavigation>
   )
 }

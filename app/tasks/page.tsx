@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { useRouter } from 'next/navigation'
 import Head from 'next/head'
-import { Plus, Calendar, CheckCircle2, Edit3, Trash2, ArrowLeft, ArrowRight } from 'lucide-react'
+import { Plus, Calendar, CheckCircle2, Edit3, Trash2, ArrowLeft, ArrowRight, Home } from 'lucide-react'
 
 const playfair = Playfair_Display({ subsets: ['latin'] })
 const inter = Inter({ subsets: ['latin'] })
@@ -97,13 +97,22 @@ export default function TasksPage() {
       </Head>
       <main className="min-h-screen bg-[#F5F5F7]">
         {/* Header */}
-        <div className="bg-white pt-12 pb-6 px-6 rounded-b-[2rem] shadow-sm">
-          <h1 className={`${playfair.className} text-3xl text-gray-900 mb-2`}>
-            Daily Tasks
-          </h1>
-          <p className={`${inter.className} text-gray-500 font-light`}>
-            {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-          </p>
+        <div className="bg-white pt-12 pb-6 px-6 rounded-b-[2rem] shadow-sm relative">
+          <button
+            onClick={() => router.push('/')}
+            className="absolute top-4 left-4 p-2 text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <Home className="w-5 h-5" />
+          </button>
+          
+          <div className="mt-4">
+            <h1 className={`${playfair.className} text-3xl text-gray-900 mb-2`}>
+              Daily Tasks
+            </h1>
+            <p className={`${inter.className} text-gray-500 font-light`}>
+              {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+            </p>
+          </div>
         </div>
 
         {/* Task Input */}

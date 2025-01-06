@@ -1,10 +1,9 @@
 'use client'
 import SwipeNavigation from '../components/SwipeNavigation'
-import MenuButton from '../components/MenuButton'
 import { useState, useEffect } from 'react'
 import { Playfair_Display, DM_Serif_Display } from 'next/font/google'
 import { useRouter } from 'next/navigation'
-import { Sun, Cloud, Bird } from 'lucide-react'
+import { Sun, Cloud, Bird, Home } from 'lucide-react'
 import Head from 'next/head'
 import { useSwipeable } from 'react-swipeable'
 
@@ -92,9 +91,6 @@ export default function WalkPage() {
       currentPage="Walk"
     >
       <div className="bg-gradient-to-b from-amber-50 via-orange-50 to-white">
-        <div className="opacity-50 hover:opacity-100 transition-opacity duration-200">
-          <MenuButton className="text-amber-700/50" />
-        </div>
         <Head>
           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -102,10 +98,17 @@ export default function WalkPage() {
           <link rel="apple-touch-icon" href="/icon.png" />
         </Head>
         
-        <main className={`min-h-[calc(100vh-48px)] relative overflow-hidden
+        <main className={`min-h-screen relative overflow-hidden
           ${isTransitioning ? 'transition-transform duration-300' : ''}
           transform translate-x-[${swipeAmount}px]`}
         >
+          <button
+            onClick={() => router.push('/')}
+            className="fixed top-4 left-4 p-2 text-amber-400/50 hover:text-amber-600 transition-colors z-50"
+          >
+            <Home className="w-5 h-5" />
+          </button>
+
           {!isExpanded && (
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
               <div className="absolute top-12 left-1/2 -translate-x-1/2 text-amber-400">
@@ -151,9 +154,7 @@ export default function WalkPage() {
               {isExpanded && (
                 <button
                   onClick={() => setIsExpanded(false)}
-                  className="fixed top-4 right-4 z-50 w-8 h-8 flex items-center justify-center
-                            rounded-full bg-amber-100/80 text-amber-600 backdrop-blur-sm
-                            hover:bg-amber-200/90 active:scale-95 transition-all duration-150"
+                  className="fixed top-4 right-4 z-50 w-8 h-8 flex items-center justify-center rounded-full bg-amber-100/80 text-amber-600 backdrop-blur-sm hover:bg-amber-200/90 active:scale-95 transition-all duration-150"
                   aria-label="Close expanded view"
                 >
                   <svg 
@@ -179,15 +180,23 @@ export default function WalkPage() {
                 onBlur={() => setIsExpanded(false)}
                 placeholder="Brief thoughts that come to mind during your walk..."
                 className={`${playfair.className} w-full 
-                           ${isExpanded ? 'fixed inset-0 top-24 h-[60vh] px-6 py-4 rounded-lg' : 'h-24 py-2 px-6 rounded-full'} 
+                           ${isExpanded ? 'fixed inset-0 top-24 h-[70vh] px-6 py-4 rounded-lg' : 'h-32 rounded-full'} 
                            bg-white
                            border border-amber-200/50
                            text-amber-900 placeholder:text-amber-400/80
                            focus:outline-none
                            shadow-sm
                            resize-none
-                           text-lg
-                           transition-all duration-300 ease-in-out`}
+                           text-base
+                           text-center
+                           placeholder:text-center
+                           flex items-center justify-center
+                           leading-relaxed
+                           transition-all duration-300 ease-in-out
+                           [&]:flex [&]:items-center [&]:justify-center`}
+                style={{
+                  paddingTop: !isExpanded ? '2.5rem' : '1rem',
+                }}
               />
               {isExpanded && (
                 <div className="fixed bottom-12 left-0 w-full flex justify-center pointer-events-none">
