@@ -1,20 +1,17 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Playfair_Display, Lato } from 'next/font/google'
+import { Playfair_Display } from 'next/font/google'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import SwipeNavigation from '../components/SwipeNavigation'
 import { Home } from 'lucide-react'
 
 const playfair = Playfair_Display({ subsets: ['latin'] })
-const lato = Lato({ weight: ['300'], subsets: ['latin'] })
 
 export default function PrayerPage() {
   const router = useRouter()
   const [timeLeft, setTimeLeft] = useState(120)
   const [isActive, setIsActive] = useState(false)
-  const [swipeAmount, setSwipeAmount] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(false)
 
   useEffect(() => {
     let interval: NodeJS.Timeout
@@ -51,10 +48,7 @@ export default function PrayerPage() {
       rightPath="/walk"
       currentPage="Prayer"
     >
-      <main className={`min-h-screen relative overflow-hidden
-        ${isTransitioning ? 'transition-transform duration-300' : ''}
-        transform translate-x-[${swipeAmount}px] bg-[#FBF0DE]`}
-      >
+      <main className="min-h-screen relative overflow-hidden bg-[#FBF0DE]">
         <button
           onClick={() => router.push('/')}
           className="fixed top-4 left-4 p-2 text-[#8B4513]/50 hover:text-[#8B4513] transition-colors z-50"
