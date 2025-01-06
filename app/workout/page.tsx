@@ -258,13 +258,13 @@ export default function WorkoutPage() {
     >
       <main className="min-h-screen p-6 bg-gradient-to-b from-orange-50 via-amber-50 to-white">
         {showTooltip && (
-          <div className="fixed top-4 right-4 bg-amber-100 p-4 rounded-lg shadow-lg z-50">
-            <p className={`${inter.className} text-sm text-orange-800`}>
-              Tip: Click any text to edit your workout plan!
+          <div className="fixed inset-x-0 top-20 mx-auto w-fit bg-amber-100/90 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg z-50">
+            <p className={`${inter.className} text-sm text-orange-800 whitespace-nowrap`}>
+              Click the edit icon to customize your workout plan!
             </p>
             <button 
               onClick={handleCloseTooltip}
-              className="absolute top-1 right-1 text-orange-600 hover:text-orange-800"
+              className="absolute -right-1 -top-1 w-6 h-6 flex items-center justify-center bg-orange-100 rounded-full text-orange-600 hover:text-orange-800 hover:bg-orange-200 transition-colors"
             >
               ×
             </button>
