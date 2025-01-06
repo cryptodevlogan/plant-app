@@ -5,7 +5,6 @@ import { Montserrat, Inter } from 'next/font/google'
 import { useRouter } from 'next/navigation'
 import { Play, Pause, SkipForward, SkipBack, X, Edit2, Home } from 'lucide-react'
 import Image from 'next/image'
-import MenuButton from '../components/MenuButton'
 import SwipeNavigation from '../components/SwipeNavigation'
 
 // Font configuration
@@ -54,11 +53,17 @@ function EditModal({ exercises, setExercises, isOpen, onClose }: EditModalProps)
     setExercises(newExercises)
   }
 
-  const updateExercise = (sectionIdx: number, itemIdx: number, field: string, value: string) => {
+  const updateExercise = (sectionIdx: number, itemIdx: number, field: keyof ExerciseItem, value: string) => {
     const newExercises = [...exercises]
     const exercise = newExercises[sectionIdx].items[itemIdx]
     if (field in exercise) {
-      (exercise as any)[field] = value
+      if (field === 'notes') {
+        // Handle notes array separately
+        exercise[field] = [value]
+      } else {
+        // Handle string fields
+        (exercise[field] as string) = value
+      }
     }
     setExercises(newExercises)
   }
