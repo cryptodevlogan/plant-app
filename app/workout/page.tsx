@@ -349,13 +349,14 @@ export default function WorkoutPage() {
                 No Excuses
               </h2>
 
-              <div className="relative w-32 sm:w-64 mx-auto mt-8">
+              <div className="relative w-32 sm:w-64 mx-auto mt-8 -ml-1">
                 <Image 
                   src="/body.png" 
                   alt="Motivational bodybuilder"
                   width={256}
                   height={256}
                   className="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
+                  priority
                 />
               </div>
             </div>

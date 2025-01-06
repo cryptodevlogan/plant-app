@@ -27,7 +27,7 @@ export default function TeaPage() {
     },
     onSwipedRight: () => {
       setIsTransitioning(true)
-      router.push('/notes')
+      router.push('/')
     },
     onTouchEndOrOnMouseUp: () => {
       setSwipeAmount(0)
@@ -62,7 +62,7 @@ export default function TeaPage() {
 
   return (
     <SwipeNavigation
-      leftPath="/notes"
+      leftPath="/"
       rightPath="/prayer"
       currentPage="Tea"
     >
