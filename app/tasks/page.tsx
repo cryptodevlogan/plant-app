@@ -210,11 +210,11 @@ export default function TasksPage() {
         <div className="fixed bottom-8 inset-x-0 px-6">
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 flex justify-between max-w-md mx-auto">
             <button
-              onClick={() => router.push('/workout')}
+              onClick={() => router.push('/anchors')}
               className="flex items-center gap-2 text-gray-600 hover:text-blue-500 transition-colors"
             >
               <ArrowLeft size={20} />
-              <span className={`${inter.className} text-sm`}>Workout</span>
+              <span className={`${inter.className} text-sm`}>Anchors</span>
             </button>
             <button
               onClick={() => window.open('https://calendar.google.com', '_blank')}

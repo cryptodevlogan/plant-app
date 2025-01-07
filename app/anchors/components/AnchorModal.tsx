@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { Anchor } from '../types'
 import { Dispatch, SetStateAction } from 'react'
 
@@ -34,6 +34,17 @@ export default function AnchorModal({
   })
   const [inactiveAnchors, setInactiveAnchors] = useState<Set<string>>(new Set())
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    }
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [isOpen])
+
+  if (!isOpen) return null
+
   const handleCreateNew = () => {
     const newAnchor: Anchor = {
       id: crypto.randomUUID(),
@@ -45,8 +56,6 @@ export default function AnchorModal({
     setEditForm({ category: '', text: '', notes: '' })
     setIsCreating(false)
   }
-
-  if (!isOpen) return null
 
   const handleEditClick = (anchor: Anchor) => {
     setEditingAnchor(anchor)
@@ -114,10 +123,10 @@ export default function AnchorModal({
   })
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center z-[9999] overflow-y-auto pb-[env(safe-area-inset-bottom)]">
+      <div className="w-full max-w-2xl bg-white rounded-t-3xl rounded-b-3xl mt-4 mb-4 mx-4 shadow-2xl max-h-[90vh] flex flex-col">
+        <div className="p-6 border-b">
+          <div className="flex justify-between items-center">
             <h2 className="text-2xl font-semibold text-gray-900">Manage Your Anchors</h2>
             <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,7 +134,9 @@ export default function AnchorModal({
               </svg>
             </button>
           </div>
+        </div>
 
+        <div className="flex-1 overflow-y-auto p-6">
           <div className="mb-8">
             {!isCreating ? (
               <button

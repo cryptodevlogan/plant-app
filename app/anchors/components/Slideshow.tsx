@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useCallback } from 'react'
+import { useEffect } from 'react'
 import type { Anchor } from '../types'
 
 interface SlideshowProps {
@@ -18,77 +18,74 @@ export default function Slideshow({
   onNextSlide,
   onPrevSlide,
 }: SlideshowProps) {
-  const handleKeyPress = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape') onClose()
-    if (e.key === 'ArrowRight') onNextSlide()
-    if (e.key === 'ArrowLeft') onPrevSlide()
-  }, [onClose, onNextSlide, onPrevSlide])
-
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress)
-    return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [handleKeyPress])
+    document.body.style.overflow = 'hidden'
+    window.scrollTo(0, 0)
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [])
 
+  if (!anchors.length) return null
   const currentAnchor = anchors[currentSlide]
+  if (!currentAnchor) return null
 
   return (
-    <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
-      <div className="absolute inset-0 flex items-center justify-between p-4">
-        {/* Previous Button */}
+    <div className="fixed inset-0 bg-black/95 z-[9999] flex flex-col safe-area-inset">
+      {/* Top Navigation Bar */}
+      <div className="sticky top-0 flex items-center justify-between px-4 py-4 bg-black/80 backdrop-blur-sm">
         <button
           onClick={onPrevSlide}
-          className="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
-          aria-label="Previous slide"
+          className="p-2 text-white/90 active:text-white/60"
+          aria-label="Previous"
         >
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-          </svg>
+          ←
         </button>
 
-        {/* Next Button */}
+        <button
+          onClick={onClose}
+          className="p-2 text-white/90 active:text-white/60"
+          aria-label="Close"
+        >
+          ✕
+        </button>
+
         <button
           onClick={onNextSlide}
-          className="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
-          aria-label="Next slide"
+          className="p-2 text-white/90 active:text-white/60"
+          aria-label="Next"
         >
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
+          →
         </button>
       </div>
 
-      {/* Close Button */}
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-4 p-2 text-white hover:bg-white/10 rounded-full transition-colors"
-        aria-label="Close slideshow"
-      >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-
-      {/* Content */}
-      <div className="text-white text-center p-8 max-w-2xl">
-        <div className="mb-8">
-          <div className="text-sm text-white/60 mb-1">{currentAnchor.category}</div>
-          <h2 className="text-3xl font-bold mb-4">{currentAnchor.text}</h2>
+      {/* Content - Now at top instead of centered */}
+      <div className="flex-1 p-6 pt-8">
+        <div className="w-full max-w-md mx-auto">
+          <div className="text-sm text-white/60 mb-2 text-center">
+            {currentAnchor.category}
+          </div>
+          <h2 className="text-2xl font-bold mb-4 text-white text-center">
+            {currentAnchor.text}
+          </h2>
           {currentAnchor.notes && (
-            <p className="text-lg text-white/80">{currentAnchor.notes}</p>
+            <p className="text-base text-white/80 text-center">
+              {currentAnchor.notes}
+            </p>
           )}
         </div>
+      </div>
 
-        {/* Progress Indicator */}
-        <div className="flex justify-center gap-2">
-          {anchors.map((_, index) => (
-            <div
-              key={index}
-              className={`w-2 h-2 rounded-full ${
-                index === currentSlide ? 'bg-white' : 'bg-white/30'
-              }`}
-            />
-          ))}
-        </div>
+      {/* Progress Indicators */}
+      <div className="sticky bottom-0 flex justify-center gap-1 px-4 py-4 bg-black/80 backdrop-blur-sm">
+        {anchors.map((_, index) => (
+          <div
+            key={index}
+            className={`w-1.5 h-1.5 rounded-full ${
+              index === currentSlide ? 'bg-white' : 'bg-white/30'
+            }`}
+          />
+        ))}
       </div>
     </div>
   )
