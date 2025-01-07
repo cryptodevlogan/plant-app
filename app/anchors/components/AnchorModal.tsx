@@ -81,7 +81,11 @@ export default function AnchorModal({
   }
 
   const handleDeactivate = (anchor: Anchor) => {
-    setInactiveAnchors(prev => new Set([...prev, anchor.id]))
+    setInactiveAnchors(prev => {
+      const newSet = new Set(prev)
+      newSet.add(anchor.id)
+      return newSet
+    })
   }
 
   const handleActivate = (anchor: Anchor) => {
