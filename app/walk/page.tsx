@@ -149,9 +149,11 @@ export default function WalkPage() {
                 <textarea
                   value={thoughts}
                   onChange={handleThoughtsChange}
-                  onFocus={() => {
+                  onFocus={(e) => {
                     setIsExpanded(true);
                     setShowMotivation(false);
+                    // Scroll to top of textarea
+                    e.target.scrollTop = 0;
                   }}
                   placeholder="Brief thoughts that come to mind during your walk..."
                   className={`w-full h-full px-6 py-4 rounded-3xl
