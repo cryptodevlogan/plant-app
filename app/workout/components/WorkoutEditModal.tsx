@@ -102,7 +102,7 @@ export default function WorkoutEditModal({
                 className="self-end px-6 py-2 rounded-xl bg-blue-500 text-white hover:bg-blue-600 
                          disabled:opacity-50 disabled:hover:bg-blue-500 transition-colors"
               >
-                Add
+                <Plus className="w-5 h-5" />
               </button>
             </div>
             <textarea
