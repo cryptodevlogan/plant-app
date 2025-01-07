@@ -50,6 +50,31 @@ export default function AnchorModal({
     }
   }, [isOpen])
 
+  // Load anchors from localStorage on initial mount
+  useEffect(() => {
+    const savedAnchors = localStorage.getItem('anchors')
+    const savedInactiveAnchors = localStorage.getItem('inactiveAnchors')
+    
+    if (savedAnchors) {
+      setAnchors(JSON.parse(savedAnchors))
+    }
+    
+    if (savedInactiveAnchors) {
+      setInactiveAnchors(new Set(JSON.parse(savedInactiveAnchors)))
+    }
+  }, [setAnchors])
+
+  // Save anchors whenever they change
+  useEffect(() => {
+    localStorage.setItem('anchors', JSON.stringify(anchors))
+  }, [anchors])
+
+  // Save inactive anchors whenever they change
+  useEffect(() => {
+    localStorage.setItem('inactiveAnchors', 
+      JSON.stringify(Array.from(inactiveAnchors)))
+  }, [inactiveAnchors])
+
   if (!isOpen) return null
 
   const handleCreateNew = () => {
