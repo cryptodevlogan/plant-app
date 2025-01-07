@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import anchorData from './anchors.json'
 import AnchorModal from './components/AnchorModal'
 import Slideshow from './components/Slideshow'
