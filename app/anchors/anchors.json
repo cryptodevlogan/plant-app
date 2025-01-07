@@ -1,0 +1,93 @@
+{
+    "suggestions": [
+      {
+        "category": "Self-Improvement & Discipline",
+        "items": [
+          {
+            "title": "Pursue Continuous Learning",
+            "description": "Growth comes from learning. Read, ask questions, and challenge your current understanding."
+          },
+          {
+            "title": "Stay Consistent",
+            "description": "Progress comes from consistency, not perfection. Show up every day, even when it's hard."
+          },
+          {
+            "title": "Set Clear Goals",
+            "description": "Without direction, you'll drift. Write down your goals and take small steps toward them daily."
+          },
+          {
+            "title": "Own Your Time",
+            "description": "Don't let distractions rob you of your life. Be deliberate with how you spend each moment."
+          }
+        ]
+      },
+      {
+        "category": "Perspective & Gratitude",
+        "items": [
+          {
+            "title": "Practice Gratitude",
+            "description": "No matter how chaotic life gets, focus on what's good. Gratitude grounds you."
+          },
+          {
+            "title": "Remember the Bigger Picture",
+            "description": "Small frustrations don't matter in the grand scheme. Stay focused on what truly matters."
+          },
+          {
+            "title": "Stay Present",
+            "description": "Life happens in the now. Don't let your thoughts pull you into the past or future."
+          }
+        ]
+      },
+      {
+        "category": "Emotional Resilience",
+        "items": [
+          {
+            "title": "Control What You Can",
+            "description": "You can't control everything, but you can control your reaction. Focus on your response, not the problem."
+          },
+          {
+            "title": "Forgive Yourself",
+            "description": "Mistakes are part of being human. Learn from them and move forward."
+          },
+          {
+            "title": "Seek Joy",
+            "description": "Life isn't just about achieving—it's about experiencing. Laugh, smile, and find joy in the little things."
+          }
+        ]
+      },
+      {
+        "category": "Community & Relationships",
+        "items": [
+          {
+            "title": "Be Kind",
+            "description": "People are fighting battles you can't see. Lead with compassion."
+          },
+          {
+            "title": "Invest in Relationships",
+            "description": "Real connection requires effort. Listen, support, and show up for others."
+          },
+          {
+            "title": "Give More Than You Take",
+            "description": "Seek to add value in every interaction. Help others without expecting something in return."
+          }
+        ]
+      },
+      {
+        "category": "Spiritual & Existential Growth",
+        "items": [
+          {
+            "title": "Reflect Daily",
+            "description": "Take time to check in with yourself. What went well today? What could you improve?"
+          },
+          {
+            "title": "Pursue Meaning",
+            "description": "Don't just exist—live with purpose. Align your actions with your values."
+          },
+          {
+            "title": "Accept Uncertainty",
+            "description": "The unknown is part of life's beauty. Embrace it and let it guide your growth."
+          }
+        ]
+      }
+    ]
+} 
