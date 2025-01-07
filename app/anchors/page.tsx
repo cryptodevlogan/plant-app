@@ -51,41 +51,41 @@ export default function AnchorsPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-amber-50/80 via-orange-50/50 to-white overflow-auto pb-24">
-      {/* Header */}
-      <header className="sticky top-0 z-10 backdrop-blur-md bg-white/70 border-b border-amber-100/50">
-        <div className="flex justify-between items-center px-4 py-3">
+      {/* Enhanced Header */}
+      <header className="sticky top-0 z-20 backdrop-blur-md bg-white/70 border-b border-amber-100/50 px-4 py-3">
+        <div className="flex justify-between items-center max-w-4xl mx-auto">
           <button
-            onClick={() => window.location.href = '/'}
-            className="p-2 rounded-full hover:bg-amber-100/50 text-amber-700 transition-colors active:bg-amber-200/50"
+            onClick={() => router.push('/')}
+            className="p-2.5 -ml-2.5 rounded-full hover:bg-amber-100/50 text-amber-700 transition-colors active:bg-amber-200/50"
             aria-label="Go to Home"
           >
-            <Home className="w-5 h-5" />
+            <Home className="w-[18px] h-[18px]" />
           </button>
-          <h1 className={`${montserrat.className} text-lg font-bold text-amber-900`}>
+          <h1 className={`${montserrat.className} text-lg font-bold text-amber-900 tracking-tight`}>
             Daily Anchors
           </h1>
-          <div className="flex gap-2">
+          <div className="flex gap-1.5">
             <button
               onClick={() => setIsEditMode(true)}
-              className="p-2 rounded-full hover:bg-amber-100/50 text-amber-700 transition-colors active:bg-amber-200/50"
+              className="p-2.5 rounded-full hover:bg-amber-100/50 text-amber-700 transition-colors active:bg-amber-200/50"
               aria-label="Add or Edit Anchors"
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-[18px] h-[18px]" />
             </button>
             {anchors.length > 0 && (
               <button
                 onClick={() => handleStartSlideshow(null)}
-                className="p-2 rounded-full hover:bg-amber-100/50 text-amber-700 transition-colors active:bg-amber-200/50"
+                className="p-2.5 rounded-full hover:bg-amber-100/50 text-amber-700 transition-colors active:bg-amber-200/50"
                 aria-label="Start Slideshow"
               >
-                <PlayCircle className="w-5 h-5" />
+                <PlayCircle className="w-[18px] h-[18px]" />
               </button>
             )}
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* Enhanced Main Content */}
       <div className="px-4 py-6 max-w-4xl mx-auto">
         <div className="space-y-8">
           {Object.entries(
@@ -97,27 +97,29 @@ export default function AnchorsPage() {
           ).map(([category, categoryAnchors]) => (
             <section key={category} className="space-y-4">
               <div className="flex justify-between items-center px-2">
-                <h2 className={`${montserrat.className} text-lg font-semibold text-amber-800`}>
+                <h2 className={`${montserrat.className} text-base font-semibold text-amber-800/90`}>
                   {category}
                 </h2>
                 <button
                   onClick={() => handleStartSlideshow(category)}
-                  className="text-sm text-amber-600 hover:text-amber-800 transition-colors active:text-amber-900 px-3 py-1.5 rounded-full hover:bg-amber-50/50"
+                  className="text-sm text-amber-600/90 hover:text-amber-800 transition-colors active:text-amber-900 px-3 py-1.5 rounded-full hover:bg-amber-50/50 flex items-center gap-1"
                 >
-                  View All →
+                  View All
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
-              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {categoryAnchors.map((anchor) => (
                   <div 
                     key={anchor.id} 
-                    className="bg-white rounded-2xl p-5 shadow-sm border border-amber-100/50 hover:shadow-md transition-all active:scale-[0.98]"
+                    className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-sm border border-amber-100/50 
+                             hover:shadow-md hover:bg-white transition-all duration-200 active:scale-[0.98]"
                   >
-                    <h3 className={`${inter.className} font-medium text-amber-900 mb-2`}>
+                    <h3 className={`${inter.className} font-medium text-amber-900/90 mb-2`}>
                       {anchor.text}
                     </h3>
                     {anchor.notes && (
-                      <p className={`${inter.className} text-sm text-amber-600/90`}>
+                      <p className={`${inter.className} text-sm text-amber-600/80 leading-relaxed`}>
                         {anchor.notes}
                       </p>
                     )}
@@ -129,22 +131,23 @@ export default function AnchorsPage() {
         </div>
       </div>
 
-      {/* Bottom Navigation */}
-      <div className="fixed bottom-8 inset-x-0 px-6">
-        <div className="bg-white rounded-2xl shadow-lg border border-amber-100 p-4 flex justify-between max-w-md mx-auto">
+      {/* Enhanced Bottom Navigation */}
+      <div className="fixed bottom-8 inset-x-0 px-4 z-20">
+        <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-amber-100/50 
+                      p-4 flex justify-between max-w-md mx-auto">
           <button
             onClick={() => router.push('/workout')}
-            className="flex items-center gap-2 text-amber-600 hover:text-amber-800 transition-colors"
+            className="flex items-center gap-2 text-amber-600/90 hover:text-amber-800 transition-colors px-2"
           >
-            <ArrowLeft size={20} />
-            <span className={`${inter.className} text-sm`}>Workout</span>
+            <ArrowLeft className="w-[18px] h-[18px]" />
+            <span className={`${inter.className} text-sm font-medium`}>Workout</span>
           </button>
           <button
             onClick={() => router.push('/tasks')}
-            className="flex items-center gap-2 text-amber-600 hover:text-amber-800 transition-colors"
+            className="flex items-center gap-2 text-amber-600/90 hover:text-amber-800 transition-colors px-2"
           >
-            <span className={`${inter.className} text-sm`}>Tasks</span>
-            <ArrowRight size={20} />
+            <span className={`${inter.className} text-sm font-medium`}>Tasks</span>
+            <ArrowRight className="w-[18px] h-[18px]" />
           </button>
         </div>
       </div>
