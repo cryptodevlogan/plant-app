@@ -22,7 +22,7 @@ export default function WorkoutPage() {
   const router = useRouter()
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [audio] = useState(new Audio('/workout-music.mp3'))
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
   const [exercises, setExercises] = useState<Exercise[]>(() => {
     const saved = localStorage.getItem('workoutExercises')
     return saved ? JSON.parse(saved) : [
@@ -55,8 +55,15 @@ export default function WorkoutPage() {
   const [isEditMode, setIsEditMode] = useState(false)
   const [timeLeft, setTimeLeft] = useState<number>(0)
 
+  // Initialize audio on client side only
+  useEffect(() => {
+    setAudio(new Audio('/workout-music.mp3'))
+  }, [])
+
   // Handle audio play/pause
   useEffect(() => {
+    if (!audio) return
+
     if (isPlaying) {
       audio.play()
     } else {
