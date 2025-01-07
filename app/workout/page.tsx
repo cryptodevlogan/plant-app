@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence, PanInfo } from 'framer-motion'
-import { Home, ArrowLeft, ArrowRight, Play, Pause, Volume2, Edit3 } from 'lucide-react'
+import { Home, ArrowLeft, ArrowRight, Play, Pause, Edit3 } from 'lucide-react'
 import WorkoutEditModal from './components/WorkoutEditModal'
 
 const playfair = Playfair_Display({ subsets: ['latin'] })
@@ -23,7 +23,6 @@ export default function WorkoutPage() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [audio] = useState(new Audio('/workout-music.mp3'))
-  const [volume, setVolume] = useState(0.7)
   const [exercises, setExercises] = useState<Exercise[]>(() => {
     const saved = localStorage.getItem('workoutExercises')
     return saved ? JSON.parse(saved) : [
@@ -126,9 +125,7 @@ export default function WorkoutPage() {
           <h1 className={`${playfair.className} text-lg font-bold text-white/90`}>
             Morning Flow
           </h1>
-          <button className="p-2.5 rounded-full hover:bg-white/10 text-white/90 transition-colors">
-            <Volume2 className="w-[18px] h-[18px]" />
-          </button>
+          <div className="w-[18px]" />
         </div>
       </header>
 
