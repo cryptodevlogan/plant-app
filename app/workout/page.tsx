@@ -23,37 +23,42 @@ export default function WorkoutPage() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
-  const [exercises, setExercises] = useState<Exercise[]>(() => {
-    const saved = localStorage.getItem('workoutExercises')
-    return saved ? JSON.parse(saved) : [
-      { 
-        id: '1', 
-        name: 'Warm Up', 
-        duration: 180,
-        description: 'Light stretching and joint mobility exercises to prepare your body.'
-      },
-      { 
-        id: '2', 
-        name: 'High Knees', 
-        duration: 60,
-        description: 'Run in place bringing knees up to hip level. Keep your core engaged.'
-      },
-      { 
-        id: '3', 
-        name: 'Mountain Climbers', 
-        duration: 60,
-        description: 'Start in plank position. Alternate bringing knees to chest rapidly.'
-      },
-      { 
-        id: '4', 
-        name: 'Rest', 
-        duration: 30,
-        description: 'Take deep breaths and shake out your muscles.'
-      },
-    ]
-  })
+  const [exercises, setExercises] = useState<Exercise[]>([
+    { 
+      id: '1', 
+      name: 'Warm Up', 
+      duration: 180,
+      description: 'Light stretching and joint mobility exercises to prepare your body.'
+    },
+    { 
+      id: '2', 
+      name: 'High Knees', 
+      duration: 60,
+      description: 'Run in place bringing knees up to hip level. Keep your core engaged.'
+    },
+    { 
+      id: '3', 
+      name: 'Mountain Climbers', 
+      duration: 60,
+      description: 'Start in plank position. Alternate bringing knees to chest rapidly.'
+    },
+    { 
+      id: '4', 
+      name: 'Rest', 
+      duration: 30,
+      description: 'Take deep breaths and shake out your muscles.'
+    },
+  ])
   const [isEditMode, setIsEditMode] = useState(false)
   const [timeLeft, setTimeLeft] = useState<number>(0)
+
+  // Load saved exercises from localStorage on client side
+  useEffect(() => {
+    const saved = localStorage.getItem('workoutExercises')
+    if (saved) {
+      setExercises(JSON.parse(saved))
+    }
+  }, [])
 
   // Initialize audio on client side only
   useEffect(() => {
