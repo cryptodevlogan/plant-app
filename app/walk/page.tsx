@@ -109,12 +109,12 @@ export default function WalkPage() {
         )}
 
         {/* Main Content */}
-        <div className="relative z-10 w-full px-6 pt-20">
+        <div className="relative z-10 w-full px-6 pt-24">
           <div className="flex flex-col items-center">
             {/* Timer */}
             <button
               onClick={() => setIsActive(!isActive)}
-              className={`w-44 h-44 mb-8 rounded-full 
+              className={`w-44 h-44 mb-10 rounded-full 
                 bg-white/80
                 backdrop-blur-md shadow-lg 
                 flex items-center justify-center
@@ -130,7 +130,7 @@ export default function WalkPage() {
             
             {/* Title and Motivation */}
             {showMotivation && (
-              <div className="text-center mb-6 opacity-0 animate-fadeIn">
+              <div className="text-center mb-7 opacity-0 animate-fadeIn">
                 <h2 className="text-4xl font-serif text-amber-900/90 mb-2">
                   Morning Walk
                 </h2>
