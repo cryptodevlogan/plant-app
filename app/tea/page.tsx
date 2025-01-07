@@ -1,4 +1,5 @@
 'use client'
+
 import { useState, useEffect } from 'react'
 import { Playfair_Display, Lato } from 'next/font/google'
 import Image from 'next/image'
@@ -72,43 +73,45 @@ export default function TeaPage() {
       >
         <button
           onClick={() => router.push('/')}
-          className="fixed top-4 left-4 p-2 text-[#8B4513]/50 hover:text-[#8B4513] transition-colors z-50"
+          className="fixed top-6 left-6 p-2 text-[#8B4513]/50 hover:text-[#8B4513] transition-colors z-50"
         >
           <Home className="w-5 h-5" />
         </button>
 
-        <div className="min-h-screen flex flex-col items-center justify-start gap-4 pt-4 px-6 bg-[#FFCC90]">
-          <div className="w-full max-w-xs flex flex-col items-center text-center mb-4">
-            <h1 className={`${playfair.className} text-[2.5rem] leading-tight tracking-wide text-[#8B4513] mb-2`}>
-              TEA TIME
-            </h1>
-            <p className={`${lato.className} text-[#8B4513] text-sm font-light`}>
-              Take a moment to prepare and enjoy.
-            </p>
-          </div>
-          
-          <div className="relative w-64 h-64">
-            <Image
-              src="/teacup.png"
-              alt="Cute smiling teacup"
-              width={256}
-              height={256}
-              className="object-contain"
-              priority
-            />
-          </div>
+        <div className="min-h-screen flex flex-col items-center justify-start px-6 bg-[#FFCC90]">
+          <div className="w-full max-w-xs flex flex-col items-center pt-24">
+            <div className="text-center mb-4">
+              <h1 className={`${playfair.className} text-[2.5rem] leading-tight tracking-wide text-[#8B4513] mb-2`}>
+                TEA TIME
+              </h1>
+              <p className={`${lato.className} text-[#8B4513] text-sm font-light`}>
+                Take a moment to prepare and enjoy.
+              </p>
+            </div>
+            
+            <div className="relative w-64 h-48">
+              <Image
+                src="/teacup.png"
+                alt="Cute smiling teacup"
+                width={256}
+                height={256}
+                className="object-contain"
+                priority
+              />
+            </div>
 
-          <div className="w-full max-w-xs text-center -mt-24">
-            <p className={`${playfair.className} text-[3.5rem] leading-none text-[#8B4513] tracking-wide`}>
-              {formatTime(timeLeft)}
-            </p>
-            <div className="mt-4 space-x-4">
-              <button 
-                onClick={isRunning ? resetTimer : startTimer}
-                className={`${lato.className} px-4 py-2 rounded-full bg-[#8B4513] text-white text-sm`}
-              >
-                {isRunning ? 'Reset' : 'Start'}
-              </button>
+            <div className="w-full max-w-xs text-center">
+              <p className={`${playfair.className} text-[3.5rem] leading-none text-[#8B4513] tracking-wide`}>
+                {formatTime(timeLeft)}
+              </p>
+              <div className="mt-4 space-x-4">
+                <button 
+                  onClick={isRunning ? resetTimer : startTimer}
+                  className={`${lato.className} px-4 py-2 rounded-full bg-[#8B4513] text-white text-sm`}
+                >
+                  {isRunning ? 'Reset' : 'Start'}
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -1,229 +1,244 @@
-'use client'
-import SwipeNavigation from '../components/SwipeNavigation'
-import { useState, useEffect } from 'react'
-import { Playfair_Display, DM_Serif_Display } from 'next/font/google'
-import { useRouter } from 'next/navigation'
-import { Sun, Cloud, Bird, Home } from 'lucide-react'
-import Head from 'next/head'
-import { useSwipeable } from 'react-swipeable'
+'use client';
 
-const playfair = Playfair_Display({ subsets: ['latin'] })
-const dmSerif = DM_Serif_Display({ weight: '400', subsets: ['latin'] })
+import React, { useState, useEffect } from 'react';
+import { Sun, Cloud, Bird, Home, ChevronDown, ArrowLeft, ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation'
 
 export default function WalkPage() {
-  const router = useRouter()
-  const [thoughts, setThoughts] = useState('')
-  const [timeLeft, setTimeLeft] = useState(300)
-  const [isActive, setIsActive] = useState(false)
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [swipeAmount, setSwipeAmount] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(false)
-
-  useSwipeable({
-    onSwiping: (e) => {
-      setSwipeAmount(e.deltaX)
-    },
-    onSwipedLeft: () => {
-      setIsTransitioning(true)
-      router.push('/workout')
-    },
-    onSwipedRight: () => {
-      setIsTransitioning(true)
-      router.push('/prayer')
-    },
-    onTouchEndOrOnMouseUp: () => {
-      setSwipeAmount(0)
-    },
-    preventScrollOnSwipe: true,
-    trackMouse: true
-  })
+  const [thoughts, setThoughts] = useState<string>('');
+  const [timeLeft, setTimeLeft] = useState<number>(300);
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [showMotivation, setShowMotivation] = useState<boolean>(true);
+  const router = useRouter();
 
   useEffect(() => {
-    const savedThoughts = localStorage.getItem('walkingThoughts')
-    const lastSaveDate = localStorage.getItem('walkingThoughtsDate')
-    const today = new Date().toDateString()
-
+    const savedThoughts = localStorage.getItem('walkingThoughts');
+    const lastSaveDate = localStorage.getItem('walkingThoughtsDate');
+    const today = new Date().toDateString();
+    
     if (savedThoughts && lastSaveDate === today) {
-      setThoughts(savedThoughts)
+      setThoughts(savedThoughts);
     } else {
-      localStorage.removeItem('walkingThoughts')
-      localStorage.removeItem('walkingThoughtsDate')
-      setThoughts('')
+      localStorage.removeItem('walkingThoughts');
+      localStorage.removeItem('walkingThoughtsDate');
+      setThoughts('');
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout
-
+    let interval: NodeJS.Timeout | undefined;
+    
     if (isActive && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft(time => {
           if (time <= 1) {
-            const alarm = new Audio('/gentle-alarm.mp3')
-            alarm.play()
-            setIsActive(false)
+            const alarm = new Audio('/gentle-alarm.mp3');
+            alarm.play();
+            setIsActive(false);
           }
-          return time - 1
-        })
-      }, 1000)
+          return time - 1;
+        });
+      }, 1000);
     }
+    
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isActive, timeLeft]);
 
-    return () => clearInterval(interval)
-  }, [isActive, timeLeft])
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins}:${secs.toString().padStart(2, '0')}`
-  }
-
-  const handleThoughtsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newThoughts = e.target.value
-    setThoughts(newThoughts)
-    localStorage.setItem('walkingThoughts', newThoughts)
-    localStorage.setItem('walkingThoughtsDate', new Date().toDateString())
-  }
+  const handleThoughtsChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+    const newThoughts = e.target.value;
+    setThoughts(newThoughts);
+    localStorage.setItem('walkingThoughts', newThoughts);
+    localStorage.setItem('walkingThoughtsDate', new Date().toDateString());
+  };
 
   return (
-    <SwipeNavigation
-      leftPath="/prayer"
-      rightPath="/workout"
-      currentPage="Walk"
-    >
-      <div className="bg-gradient-to-b from-amber-50 via-orange-50 to-white">
-        <Head>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-          <meta name="apple-mobile-web-app-capable" content="yes" />
-          <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-          <link rel="apple-touch-icon" href="/icon.png" />
-        </Head>
+    <div className="min-h-screen bg-gradient-to-b from-orange-100 via-amber-50 to-white">
+      <div className="relative w-full h-screen overflow-hidden pb-28">
+        {/* Warm morning glow effect */}
+        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-yellow-100/20 to-orange-100/30 pointer-events-none" />
         
-        <main className={`min-h-screen relative overflow-hidden
-          ${isTransitioning ? 'transition-transform duration-300' : ''}
-          transform translate-x-[${swipeAmount}px]`}
-        >
-          <button
-            onClick={() => router.push('/')}
-            className="fixed top-4 left-4 p-2 text-amber-400/50 hover:text-amber-600 transition-colors z-50"
-          >
-            <Home className="w-5 h-5" />
-          </button>
-
-          {!isExpanded && (
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-              <div className="absolute top-12 left-1/2 -translate-x-1/2 text-amber-400">
-                <Sun size={64} className="animate-pulse" />
-              </div>
-              <div className="absolute top-24 left-12 text-amber-200/70">
-                <Cloud size={32} className="animate-bounce" />
-              </div>
-              <div className="absolute top-20 right-12 text-amber-200/70">
-                <Bird size={24} className="animate-bounce" />
-              </div>
+        {/* Header with Background Elements */}
+        <div className="px-6 pt-4">
+          <div className="flex justify-between items-center relative z-20">
+            <div className="p-1 rounded-full bg-white/80 backdrop-blur-sm">
+              <button
+                onClick={() => window.history.back()}
+                className="p-2 rounded-full text-amber-600/90 hover:text-amber-700
+                  hover:bg-amber-50 transition-all duration-300"
+              >
+                <Home size={20} />
+              </button>
             </div>
-          )}
+            <span className="text-amber-900/90 text-lg font-serif">
+              {new Date().toLocaleTimeString([], { 
+                hour: 'numeric', 
+                minute: '2-digit', 
+                hour12: true 
+              })}
+            </span>
+          </div>
+        </div>
 
-          <div className="relative w-full max-w-md mx-auto flex flex-col items-center gap-6 p-6 pt-32">
-            {!isExpanded && (
-              <div className="text-center space-y-2">
-                <h1 className={`${playfair.className} text-4xl text-amber-800`}>
+        {!isExpanded && (
+          <div className="absolute top-0 left-0 w-full pointer-events-none">
+            <div className="relative">
+              <Cloud 
+                size={32} 
+                className="absolute left-12 top-14 text-amber-200/80 animate-float"
+              />
+              <div className="absolute left-1/2 -translate-x-1/2 top-20">
+                <Sun size={64} className="text-amber-400/90 animate-pulse-slow" />
+              </div>
+              <Bird 
+                size={24} 
+                className="absolute right-12 top-14 text-amber-200/80 animate-float-delayed"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Main Content */}
+        <div className="relative z-10 w-full px-6 pt-20">
+          <div className="flex flex-col items-center">
+            {/* Timer */}
+            <button
+              onClick={() => setIsActive(!isActive)}
+              className={`w-44 h-44 mb-8 rounded-full 
+                bg-white/80
+                backdrop-blur-md shadow-lg 
+                flex items-center justify-center
+                transition-all duration-500
+                border border-amber-200/30
+                group
+                ${isActive ? 'ring-2 ring-amber-200/50' : ''}`}
+            >
+              <div className="text-6xl font-serif text-amber-900/90 transition-transform duration-300 group-hover:scale-105">
+                {formatTime(timeLeft)}
+              </div>
+            </button>
+            
+            {/* Title and Motivation */}
+            {showMotivation && (
+              <div className="text-center mb-6 opacity-0 animate-fadeIn">
+                <h2 className="text-4xl font-serif text-amber-900/90 mb-2">
                   Morning Walk
-                </h1>
-                <p className={`${playfair.className} text-lg text-amber-700/90`}>
-                  Embrace the fresh morning air and note any thoughts that arise
+                </h2>
+                <p className="text-lg text-amber-800/80">
+                  Embrace the morning air
                 </p>
               </div>
             )}
 
-            <div className={`${isExpanded ? 'fixed top-6 left-1/2 -translate-x-1/2 z-50' : 'flex flex-col items-center gap-6 my-4'}`}>
-              {(!isExpanded || timeLeft <= 60) && (
-                <button
-                  onClick={() => setIsActive(!isActive)}
-                  className={`relative flex items-center justify-center ${isExpanded ? 'w-20 h-20' : 'w-36 h-36'} 
-                             rounded-full bg-gradient-to-br from-amber-100 to-white shadow-lg border-2 border-amber-200/50
-                             hover:from-amber-200 hover:to-amber-50 active:scale-95 transition-all duration-150`}
-                >
-                  <p className={`${dmSerif.className} ${isExpanded ? 'text-3xl' : 'text-5xl'} text-amber-800`}>
-                    {formatTime(timeLeft)}
-                  </p>
-                </button>
-              )}
-            </div>
-
-            <div className="w-full px-6">
-              {isExpanded && (
-                <button
-                  onClick={() => setIsExpanded(false)}
-                  className="fixed top-4 right-4 z-50 w-8 h-8 flex items-center justify-center rounded-full bg-amber-100/80 text-amber-600 backdrop-blur-sm hover:bg-amber-200/90 active:scale-95 transition-all duration-150"
-                  aria-label="Close expanded view"
-                >
-                  <svg 
-                    width="14" 
-                    height="14" 
-                    viewBox="0 0 14 14" 
-                    fill="none" 
-                    xmlns="http://www.w3.org/2000/svg"
+            {/* Thoughts Input */}
+            <div className="w-full">
+              <div 
+                className={`transition-all duration-300 ease-in-out mb-20
+                  ${isExpanded ? 'fixed inset-x-4 top-20 bottom-28 z-50' : 'relative w-full h-32'}`}
+              >
+                <textarea
+                  value={thoughts}
+                  onChange={handleThoughtsChange}
+                  onFocus={() => {
+                    setIsExpanded(true);
+                    setShowMotivation(false);
+                  }}
+                  placeholder="Brief thoughts that come to mind during your walk..."
+                  className={`w-full h-full px-6 py-4 rounded-3xl
+                    bg-white/90 backdrop-blur-md
+                    border border-amber-200/50
+                    text-amber-900 placeholder:text-amber-400
+                    focus:outline-none focus:ring-2 focus:ring-amber-200/50
+                    shadow-lg
+                    resize-none
+                    text-base text-center
+                    transition-all duration-300`}
+                  style={{
+                    paddingTop: !isExpanded ? '2.5rem' : '1rem',
+                  }}
+                />
+                {isExpanded && (
+                  <button
+                    onClick={() => {
+                      setIsExpanded(false);
+                      setShowMotivation(true);
+                    }}
+                    className="absolute -bottom-12 left-1/2 transform -translate-x-1/2
+                      p-3 rounded-full bg-white/90 backdrop-blur-sm
+                      text-amber-600 hover:bg-amber-50 transition-all duration-300"
                   >
-                    <path 
-                      d="M13 1L1 13M1 1L13 13" 
-                      stroke="currentColor" 
-                      strokeWidth="2" 
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </button>
-              )}
-              <textarea
-                value={thoughts}
-                onChange={handleThoughtsChange}
-                onFocus={() => setIsExpanded(true)}
-                onBlur={() => setIsExpanded(false)}
-                placeholder="Brief thoughts that come to mind during your walk..."
-                className={`${playfair.className} w-full 
-                           ${isExpanded ? 'fixed inset-0 top-24 h-[70vh] px-6 py-4 rounded-lg' : 'h-32 rounded-full'} 
-                           bg-white
-                           border border-amber-200/50
-                           text-amber-900 placeholder:text-amber-400/80
-                           focus:outline-none
-                           shadow-sm
-                           resize-none
-                           text-base
-                           text-center
-                           placeholder:text-center
-                           flex items-center justify-center
-                           leading-relaxed
-                           transition-all duration-300 ease-in-out
-                           [&]:flex [&]:items-center [&]:justify-center`}
-                style={{
-                  paddingTop: !isExpanded ? '2.5rem' : '1rem',
-                }}
-              />
-              {isExpanded && (
-                <div className="fixed bottom-12 left-0 w-full flex justify-center pointer-events-none">
-                  <Sun 
-                    size={48} 
-                    className="text-amber-300/70" 
-                  />
-                </div>
-              )}
+                    <ChevronDown size={20} />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-        </main>
+        </div>
 
-        <style jsx global>{`
-          @keyframes fly {
-            0% {
-              transform: translate(-100%, 0) rotate(10deg);
-            }
-            50% {
-              transform: translate(0%, -20px) rotate(-5deg);
-            }
-            100% {
-              transform: translate(100%, 0) rotate(10deg);
-            }
-          }
-        `}</style>
+        {/* iOS-style Bottom Navigation */}
+        <div className="fixed bottom-8 inset-x-0 px-6 z-30">
+          <div className="max-w-xl mx-auto">
+            <div className="bg-white/90 backdrop-blur-xl rounded-3xl border border-amber-200/30 
+                        flex justify-between">
+              <button
+                onClick={() => router.push('/prayer')}
+                className="flex items-center gap-2 text-amber-900/80 hover:text-amber-900 transition-colors py-4 px-6"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span className="text-sm">Prayer</span>
+              </button>
+              <button
+                onClick={() => router.push('/workout')}
+                className="flex items-center gap-2 text-amber-900/80 hover:text-amber-900 transition-colors py-4 px-6"
+              >
+                <span className="text-sm">Workout</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </SwipeNavigation>
-  )
+
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
+        }
+        @keyframes float-delayed {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-6px); }
+        }
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.9; }
+          50% { opacity: 0.7; }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-float {
+          animation: float 4s ease-in-out infinite;
+        }
+        .animate-float-delayed {
+          animation: float-delayed 4.5s ease-in-out infinite;
+        }
+        .animate-pulse-slow {
+          animation: pulse-slow 3s ease-in-out infinite;
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.6s ease-out forwards;
+        }
+      `}</style>
+    </div>
+  );
 }

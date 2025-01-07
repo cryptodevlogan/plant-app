@@ -1,13 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Playfair_Display, Inter } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence, PanInfo } from 'framer-motion'
 import { Home, ArrowLeft, ArrowRight, Play, Pause, Edit3 } from 'lucide-react'
 import WorkoutEditModal from './components/WorkoutEditModal'
 
-const playfair = Playfair_Display({ subsets: ['latin'] })
 const inter = Inter({ subsets: ['latin'] })
 
 interface Exercise {
@@ -124,7 +123,7 @@ export default function WorkoutPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-blue-900 via-blue-800 to-indigo-900 overflow-hidden">
+    <main className={`${inter.className} min-h-screen bg-gradient-to-b from-blue-900 via-blue-800 to-indigo-900 overflow-hidden`}>
       {/* Header */}
       <header className="sticky top-0 z-20 backdrop-blur-md bg-white/10 px-4 py-3">
         <div className="flex justify-between items-center max-w-4xl mx-auto">
@@ -134,7 +133,7 @@ export default function WorkoutPage() {
           >
             <Home className="w-[18px] h-[18px]" />
           </button>
-          <h1 className={`${playfair.className} text-lg font-bold text-white/90`}>
+          <h1 className="text-lg font-bold text-white/90">
             Morning Flow
           </h1>
           <div className="w-[18px]" />
@@ -167,16 +166,16 @@ export default function WorkoutPage() {
               </div>
               
               <div className="w-full text-center">
-                <p className={`${inter.className} text-sm font-medium text-white/60 mb-2`}>
+                <p className="text-sm font-medium text-white/60 mb-2">
                   {currentIndex + 1} of {exercises.length}
                 </p>
-                <h2 className={`${playfair.className} text-3xl font-bold mb-4`}>
+                <h2 className="text-3xl font-bold mb-4">
                   {exercises[currentIndex].name}
                 </h2>
-                <p className={`${inter.className} text-xl font-medium text-white/90 mb-6`}>
+                <p className="text-xl font-medium text-white/90 mb-6">
                   {formatTime(timeLeft || exercises[currentIndex].duration)}
                 </p>
-                <p className={`${inter.className} text-sm text-white/80 leading-relaxed max-w-xs mx-auto`}>
+                <p className="text-sm text-white/80 leading-relaxed max-w-xs mx-auto">
                   {exercises[currentIndex].description}
                 </p>
               </div>
@@ -197,7 +196,7 @@ export default function WorkoutPage() {
       </div>
 
       {/* Playback Controls */}
-      <div className="fixed bottom-24 inset-x-0 px-4">
+      <div className="fixed bottom-32 inset-x-0 px-4">
         <div className="max-w-sm mx-auto flex justify-center items-center gap-8">
           <button
             onClick={() => currentIndex > 0 && setCurrentIndex(currentIndex - 1)}
