@@ -152,8 +152,11 @@ export default function WalkPage() {
                   onFocus={(e) => {
                     setIsExpanded(true);
                     setShowMotivation(false);
-                    // Scroll to top of textarea
-                    e.target.scrollTop = 0;
+                    // Delay scroll to top to work with iOS keyboard animation
+                    setTimeout(() => {
+                      e.target.scrollTop = 0;
+                      window.scrollTo(0, 0);
+                    }, 100);
                   }}
                   placeholder="Brief thoughts that come to mind during your walk..."
                   className={`w-full h-full px-6 py-4 rounded-3xl
