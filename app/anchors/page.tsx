@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import anchorData from './anchors.json'
 import AnchorModal from './components/AnchorModal'
 import Slideshow from './components/Slideshow'
+import { useRouter } from 'next/navigation'
 
 interface Anchor {
   id: string
@@ -13,6 +14,7 @@ interface Anchor {
 }
 
 export default function AnchorsPage() {
+  const router = useRouter()
   const [anchors, setAnchors] = useState<Anchor[]>(() => {
     return anchorData.suggestions.flatMap(category =>
       category.items.map(item => ({
@@ -126,6 +128,15 @@ export default function AnchorsPage() {
           onPrevSlide={() => setCurrentSlide((prev) => (prev - 1 + slideshowAnchors.length) % slideshowAnchors.length)}
         />
       )}
+
+      <div className="flex gap-2">
+        <button
+          onClick={() => router.push('/tasks')}
+          className="px-4 py-2 bg-primary text-white rounded-md"
+        >
+          Next
+        </button>
+      </div>
     </div>
   )
 }

@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 interface SwipeNavigationProps {
   leftPath: string
   rightPath: string
-  currentPage: 'Tea' | 'Prayer' | 'Walk' | 'Workout' | 'Tasks' | 'Notes'
+  currentPage: 'Tea' | 'Prayer' | 'Walk' | 'Workout' | 'Anchors' | 'Tasks' | 'Notes'
   children: React.ReactNode
 }
 
@@ -41,7 +41,7 @@ export default function SwipeNavigation({ leftPath, rightPath, currentPage, chil
   const leftOpacity = Math.max(0, Math.min(1, swipeAmount / 100))
   const rightOpacity = Math.max(0, Math.min(1, -swipeAmount / 100))
 
-  const pages = ['Tea', 'Prayer', 'Walk', 'Workout', 'Tasks', 'Notes']
+  const pages = ['Tea', 'Prayer', 'Walk', 'Workout', 'Anchors', 'Tasks', 'Notes']
   const currentIndex = pages.indexOf(currentPage)
 
   return (

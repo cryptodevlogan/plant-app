@@ -253,9 +253,14 @@ export default function WorkoutPage() {
   return (
     <SwipeNavigation
       leftPath="/walk"
-      rightPath="/tasks"
+      rightPath="/anchors"
       currentPage="Workout"
     >
+      <style jsx global>{`
+        .fixed.bottom-8 {
+          bottom: 4rem;
+        }
+      `}</style>
       <main className="min-h-screen p-6 bg-gradient-to-b from-orange-50 via-amber-50 to-white">
         {showTooltip && (
           <div className="fixed inset-x-0 top-20 mx-auto w-fit bg-amber-100/90 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg z-50">
@@ -410,6 +415,15 @@ export default function WorkoutPage() {
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
         />
+
+        <div className="flex gap-2">
+          <button
+            onClick={() => router.push('/anchors')}
+            className="px-4 py-2 bg-primary text-white rounded-md"
+          >
+            Next
+          </button>
+        </div>
       </main>
     </SwipeNavigation>
   )
